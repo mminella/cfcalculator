@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Crop Factor Calculator</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+      body {
+        background: url("http://farm6.staticflickr.com/5542/14582537593_c3af31b5bd_h.jpg") no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+         background-size: cover;
+         color: white;
+      }
+      #formContainer {
+        float: right; 
+        border: 1px solid gray; 
+        background: rgba(0,0,0,.75);
+        margin:10% 20%;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div id="formContainer">
+      <form role="form" oninput="updateOutput();">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Crop factor of your camera</label>
+          <select id="cropFactor" name="cropFactor" class="form-control">
+            <option value="1">Full Frame (1x)</option>
+            <option value="1.5">APS-C Nikon (1.5x)</option>
+            <option value="1.6">APS-C Canon (1.6x)</option>
+            <option value="2">Four Thirds (2x)</option>
+            <option value=".5">Medium Format (.5x)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="minFocalLength">Minimum Focal Length</label>
+          <input type="number" class="form-control" id="minFocalLength" placeholder="70">
+        </div>
+        <div class="form-group">
+          <label for="maxFocalLength">Maximum Focal Length</label>
+          <input type="number" class="form-control" id="maxFocalLength" placeholder="200">
+        </div>
+        <div class="form-group">
+          <label for="minAperture">Minimum Aperture</label>
+          <input type="text" class="form-control" id="minAperture" placeholder="2.8">
+        </div>
+        <div class="form-group">
+          <label for="maxAperture">Maximum Aperture</label>
+          <input type="text" class="form-control" id="maxAperture" placeholder="2.8">
+        </div>
+        <div class="form-group">
+          <label for="result">Full Frame Equivilant</label>
+          <input type="output" class="form-control" id="result">
+        </div>
+      </form>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    <script>
+      function updateOutput() {
+        var cropFactor = $('#cropFactor').val();
+        var minFocalLength = $('#minFocalLength').val();
+        var maxFocalLength = $('#maxFocalLength').val();
+        var minAperture = $('#minAperture').val();
+        var maxAperture = $('#maxAperture').val();
+
+        var focalLength = "mm";
+        var aperture = "f";
+
+        if(minFocalLength == maxFocalLength || minFocalLength == "" || maxFocalLength == "") {
+          if(minFocalLength == "") {
+            focalLength = (maxFocalLength * cropFactor) + " mm";
+          } else if(maxFocalLength == "") {
+            focalLength = (minFocalLength * cropFactor) + " mm";
+          } else {
+            focalLength = (minFocalLength * cropFactor) + " mm";
+          }
+        } else {
+          focalLength = (minFocalLength * cropFactor) + "-" + (maxFocalLength * cropFactor) + " mm"
+        }
+
+        if(minAperture == maxAperture || minAperture == "" || maxAperture == "") {
+          if(minAperture == "") {
+            aperture = "f " + (Math.round((maxAperture * cropFactor) * 10) / 10);
+          } else if(maxAperture == "") {
+            aperture = "f " + (Math.round((minAperture * cropFactor) * 10) / 10);
+          } else {
+            aperture = "f " + (Math.round((minAperture * cropFactor) * 10) / 10);
+          }
+        } else {
+          aperture = "f " + (Math.round((minAperture * cropFactor) * 10) / 10) + "-" + (Math.round((maxAperture * cropFactor) * 10) / 10);
+        }
+
+        $('#result').val(focalLength + " " + aperture);
+      }
+     </script>
+  </body>
+</html>
